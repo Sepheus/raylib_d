@@ -209,6 +209,10 @@ enum Color BLANK = Color(0, 0, 0, 0);           // Blank (Transparent)
 enum Color MAGENTA = Color(255, 0, 255, 255);     // Magenta
 enum Color RAYWHITE = Color(245, 245, 245, 255);   // My own White (raylib logo)
 
+// Shader and material limits
+enum int MAX_SHADER_LOCATIONS       = 32;      // Maximum number of predefined locations stored in shader struct
+enum int MAX_MATERIAL_MAPS          = 12;      // Maximum number of texture maps stored in shader struct
+
 
 /* --- end manual inserts */
 
