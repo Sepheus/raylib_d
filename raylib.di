@@ -2,6 +2,216 @@ pragma(lib, "raylib");
 
 extern (C):
 
+/* --- begin manual inserts */
+
+enum float PI = 3.14159265358979323846f;
+
+enum float DEG2RAD = (PI/180.0f);
+enum float RAD2DEG = (180.0f/PI);
+
+// raylib Config Flags
+enum int FLAG_SHOW_LOGO            =  1;       // Set to show raylib logo at startup
+enum int FLAG_FULLSCREEN_MODE      =  2;       // Set to run program in fullscreen
+enum int FLAG_WINDOW_RESIZABLE     =  4;       // Set to allow resizable window
+enum int FLAG_WINDOW_UNDECORATED   =  8;       // Set to disable window decoration (frame and buttons)
+enum int FLAG_WINDOW_TRANSPARENT   = 16;       // Set to allow transparent window
+enum int FLAG_MSAA_4X_HINT         = 32;       // Set to try enabling MSAA 4X
+enum int FLAG_VSYNC_HINT           = 64;       // Set to try enabling V-Sync on GPU
+
+// Keyboard Function Keys
+enum int KEY_SPACE          =  32;
+enum int KEY_ESCAPE         = 256;
+enum int KEY_ENTER          = 257;
+enum int KEY_TAB            = 258;
+enum int KEY_BACKSPACE      = 259;
+enum int KEY_INSERT         = 260;
+enum int KEY_DELETE         = 261;
+enum int KEY_RIGHT          = 262;
+enum int KEY_LEFT           = 263;
+enum int KEY_DOWN           = 264;
+enum int KEY_UP             = 265;
+enum int KEY_PAGE_UP        = 266;
+enum int KEY_PAGE_DOWN      = 267;
+enum int KEY_HOME           = 268;
+enum int KEY_END            = 269;
+enum int KEY_CAPS_LOCK      = 280;
+enum int KEY_SCROLL_LOCK    = 281;
+enum int KEY_NUM_LOCK       = 282;
+enum int KEY_PRINT_SCREEN   = 283;
+enum int KEY_PAUSE          = 284;
+enum int KEY_F1             = 290;
+enum int KEY_F2             = 291;
+enum int KEY_F3             = 292;
+enum int KEY_F4             = 293;
+enum int KEY_F5             = 294;
+enum int KEY_F6             = 295;
+enum int KEY_F7             = 296;
+enum int KEY_F8             = 297;
+enum int KEY_F9             = 298;
+enum int KEY_F10            = 299;
+enum int KEY_F11            = 300;
+enum int KEY_F12            = 301;
+enum int KEY_LEFT_SHIFT     = 340;
+enum int KEY_LEFT_CONTROL   = 341;
+enum int KEY_LEFT_ALT       = 342;
+enum int KEY_RIGHT_SHIFT    = 344;
+enum int KEY_RIGHT_CONTROL  = 345;
+enum int KEY_RIGHT_ALT      = 346;
+enum int KEY_GRAVE          =  96;
+enum int KEY_SLASH          =  47;
+enum int KEY_BACKSLASH      =  92;
+
+// Keyboard Alpha Numeric Keys
+enum int KEY_ZERO            = 48;
+enum int KEY_ONE             = 49;
+enum int KEY_TWO             = 50;
+enum int KEY_THREE           = 51;
+enum int KEY_FOUR            = 52;
+enum int KEY_FIVE            = 53;
+enum int KEY_SIX             = 54;
+enum int KEY_SEVEN           = 55;
+enum int KEY_EIGHT           = 56;
+enum int KEY_NINE            = 57;
+enum int KEY_A               = 65;
+enum int KEY_B               = 66;
+enum int KEY_C               = 67;
+enum int KEY_D               = 68;
+enum int KEY_E               = 69;
+enum int KEY_F               = 70;
+enum int KEY_G               = 71;
+enum int KEY_H               = 72;
+enum int KEY_I               = 73;
+enum int KEY_J               = 74;
+enum int KEY_K               = 75;
+enum int KEY_L               = 76;
+enum int KEY_M               = 77;
+enum int KEY_N               = 78;
+enum int KEY_O               = 79;
+enum int KEY_P               = 80;
+enum int KEY_Q               = 81;
+enum int KEY_R               = 82;
+enum int KEY_S               = 83;
+enum int KEY_T               = 84;
+enum int KEY_U               = 85;
+enum int KEY_V               = 86;
+enum int KEY_W               = 87;
+enum int KEY_X               = 88;
+enum int KEY_Y               = 89;
+enum int KEY_Z               = 90;
+
+// Android Physical Buttons
+enum int KEY_BACK            =  4;
+enum int KEY_MENU            = 82;
+enum int KEY_VOLUME_UP       = 24;
+enum int KEY_VOLUME_DOWN     = 25;
+
+// Mouse Buttons
+enum int MOUSE_LEFT_BUTTON    = 0;
+enum int MOUSE_RIGHT_BUTTON   = 1;
+enum int MOUSE_MIDDLE_BUTTON  = 2;
+
+// Touch points registered
+enum int MAX_TOUCH_POINTS      = 2;
+
+// Gamepad Number
+enum int GAMEPAD_PLAYER1      = 0;
+enum int GAMEPAD_PLAYER2      = 1;
+enum int GAMEPAD_PLAYER3      = 2;
+enum int GAMEPAD_PLAYER4      = 3;
+
+// Gamepad Buttons/Axis
+
+// PS3 USB Controller Buttons
+enum int GAMEPAD_PS3_BUTTON_TRIANGLE =  0;
+enum int GAMEPAD_PS3_BUTTON_CIRCLE   =  1;
+enum int GAMEPAD_PS3_BUTTON_CROSS    =  2;
+enum int GAMEPAD_PS3_BUTTON_SQUARE   =  3;
+enum int GAMEPAD_PS3_BUTTON_L1       =  6;
+enum int GAMEPAD_PS3_BUTTON_R1       =  7;
+enum int GAMEPAD_PS3_BUTTON_L2       =  4;
+enum int GAMEPAD_PS3_BUTTON_R2       =  5;
+enum int GAMEPAD_PS3_BUTTON_START    =  8;
+enum int GAMEPAD_PS3_BUTTON_SELECT   =  9;
+enum int GAMEPAD_PS3_BUTTON_UP       = 24;
+enum int GAMEPAD_PS3_BUTTON_RIGHT    = 25;
+enum int GAMEPAD_PS3_BUTTON_DOWN     = 26;
+enum int GAMEPAD_PS3_BUTTON_LEFT     = 27;
+enum int GAMEPAD_PS3_BUTTON_PS       = 12;
+
+// PS3 USB Controller Axis
+enum int GAMEPAD_PS3_AXIS_LEFT_X    = 0;
+enum int GAMEPAD_PS3_AXIS_LEFT_Y    = 1;
+enum int GAMEPAD_PS3_AXIS_RIGHT_X   = 2;
+enum int GAMEPAD_PS3_AXIS_RIGHT_Y   = 5;
+enum int GAMEPAD_PS3_AXIS_L2        = 3;       // [1..-1] (pressure-level)
+enum int GAMEPAD_PS3_AXIS_R2        = 4;       // [1..-1] (pressure-level)
+
+// Xbox360 USB Controller Buttons
+enum int GAMEPAD_XBOX_BUTTON_A      = 0;
+enum int GAMEPAD_XBOX_BUTTON_B      = 1;
+enum int GAMEPAD_XBOX_BUTTON_X      = 2;
+enum int GAMEPAD_XBOX_BUTTON_Y      = 3;
+enum int GAMEPAD_XBOX_BUTTON_LB     = 4;
+enum int GAMEPAD_XBOX_BUTTON_RB     = 5;
+enum int GAMEPAD_XBOX_BUTTON_SELECT = 6;
+enum int GAMEPAD_XBOX_BUTTON_START  = 7;
+enum int GAMEPAD_XBOX_BUTTON_UP     = 10;
+enum int GAMEPAD_XBOX_BUTTON_RIGHT  = 11;
+enum int GAMEPAD_XBOX_BUTTON_DOWN   = 12;
+enum int GAMEPAD_XBOX_BUTTON_LEFT   = 13;
+enum int GAMEPAD_XBOX_BUTTON_HOME   = 8;
+
+// Android Gamepad Controller (SNES CLASSIC)
+enum int GAMEPAD_ANDROID_DPAD_UP       = 19;
+enum int GAMEPAD_ANDROID_DPAD_DOWN     = 20;
+enum int GAMEPAD_ANDROID_DPAD_LEFT     = 21;
+enum int GAMEPAD_ANDROID_DPAD_RIGHT    = 22;
+enum int GAMEPAD_ANDROID_DPAD_CENTER   = 23;
+
+enum int GAMEPAD_ANDROID_BUTTON_A      = 96;
+enum int GAMEPAD_ANDROID_BUTTON_B      = 97;
+enum int GAMEPAD_ANDROID_BUTTON_C      = 98;
+enum int GAMEPAD_ANDROID_BUTTON_X      = 99;
+enum int GAMEPAD_ANDROID_BUTTON_Y      = 100;
+enum int GAMEPAD_ANDROID_BUTTON_Z      = 101;
+enum int GAMEPAD_ANDROID_BUTTON_L1     = 102;
+enum int GAMEPAD_ANDROID_BUTTON_R1     = 103;
+enum int GAMEPAD_ANDROID_BUTTON_L2     = 104;
+enum int GAMEPAD_ANDROID_BUTTON_R2     = 105;
+
+// Some Basic Colors
+// NOTE: Custom raylib color palette for amazing visuals on WHITE background
+enum Color LIGHTGRAY = Color(200, 200, 200, 255);   // Light Gray
+enum Color GRAY = Color(130, 130, 130, 255);   // Gray
+enum Color DARKGRAY = Color(80, 80, 80, 255);      // Dark Gray
+enum Color YELLOW = Color(253, 249, 0, 255);     // Yellow
+enum Color GOLD = Color(255, 203, 0, 255);     // Gold
+enum Color ORANGE = Color(255, 161, 0, 255);     // Orange
+enum Color PINK = Color(255, 109, 194, 255);   // Pink
+enum Color RED = Color(230, 41, 55, 255);     // Red
+enum Color MAROON = Color(190, 33, 55, 255);     // Maroon
+enum Color GREEN = Color(0, 228, 48, 255);      // Green
+enum Color LIME = Color(0, 158, 47, 255);      // Lime
+enum Color DARKGREEN = Color(0, 117, 44, 255);      // Dark Green
+enum Color SKYBLUE = Color(102, 191, 255, 255);   // Sky Blue
+enum Color BLUE = Color(0, 121, 241, 255);     // Blue
+enum Color DARKBLUE = Color(0, 82, 172, 255);      // Dark Blue
+enum Color PURPLE = Color(200, 122, 255, 255);   // Purple
+enum Color VIOLET = Color(135, 60, 190, 255);    // Violet
+enum Color DARKPURPLE = Color(112, 31, 126, 255);    // Dark Purple
+enum Color BEIGE = Color(211, 176, 131, 255);   // Beige
+enum Color BROWN = Color(127, 106, 79, 255);    // Brown
+enum Color DARKBROWN = Color(76, 63, 47, 255);      // Dark Brown
+
+enum Color WHITE = Color(255, 255, 255, 255);   // White
+enum Color BLACK = Color(0, 0, 0, 255);         // Black
+enum Color BLANK = Color(0, 0, 0, 0);           // Blank (Transparent)
+enum Color MAGENTA = Color(255, 0, 255, 255);     // Magenta
+enum Color RAYWHITE = Color(245, 245, 245, 255);   // My own White (raylib logo)
+
+
+/* --- end manual inserts */
+
 // alias Vector2 Vector2;
 // alias Vector3 Vector3;
 // alias Vector4 Vector4;
