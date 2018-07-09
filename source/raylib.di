@@ -1,3 +1,5 @@
+module raylib;
+
 pragma(lib, "raylib");
 
 extern (C):
