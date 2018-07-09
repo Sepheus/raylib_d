@@ -1,0 +1,13 @@
+{
+	"name": "raylib_d",
+	"authors": [
+		"0xFireball"
+	],
+	"description": "D bindings for Raylib",
+	"copyright": "Copyright (c) 2013-2016 Ramon Santamaria (@raysan5), Nihal Talur (@0xFireball)",
+	"license": "MIT",
+	"libs": [
+		"raylib"
+	],
+	"targetType": "library"
+}
