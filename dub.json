@@ -10,4 +10,10 @@
 		"raylib"
 	],
 	"targetType": "library"
+    "configurations": [
+        {
+            "name": "library",
+            "targetType": "library"
+        }
+    ]
 }
