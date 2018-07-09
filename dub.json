@@ -9,6 +9,9 @@
 	"libs": [
 		"raylib"
 	],
+	"sourcePaths": [
+		"source/"
+	],
 	"targetType": "library",
     "configurations": [
         {
