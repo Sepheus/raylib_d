@@ -9,14 +9,7 @@
 	"libs": [
 		"raylib"
 	],
-	"sourcePaths": [
-		"source/"
-	],
-	"targetType": "library",
-    "configurations": [
-        {
-            "name": "library",
-            "targetType": "library"
-        }
-    ]
+	"importPaths": [
+		"source"
+	]
 }
