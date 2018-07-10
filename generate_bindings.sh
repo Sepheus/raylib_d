@@ -1,1 +1,1 @@
-dstep release/include/raylib.h -o raylib.d
+dstep $RAYLIB/release/include/raylib.h -o source/raylib.d
