@@ -79,6 +79,10 @@
 *
 **********************************************************************************************/
 
+module easings;
+
+import raylib;
+
 extern (C):
 
 // #define EASINGS_STATIC_INLINE     // NOTE: By default, compile functions as static inline
