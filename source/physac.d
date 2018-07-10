@@ -73,6 +73,7 @@
 module physac;
 
 import raylib;
+import core.stdc.stdlib; // for malloc() and free()
 
 extern (C):
 
