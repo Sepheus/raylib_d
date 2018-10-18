@@ -38,6 +38,7 @@
 *     3. This notice may not be removed or altered from any source distribution.
 *
 **********************************************************************************************/
+
 module raymath;
 
 import raylib;
@@ -50,6 +51,10 @@ extern (C):
 // Required for structs: Vector3, Matrix
 
 // Functions visible from other files (no name mangling of functions in C++) // Functions visible from other files
+
+// We are building raylib as a Win32 shared library (.dll).
+
+// We are using raylib as a Win32 shared library (.dll)
 
 // Provide external definition
 
@@ -107,6 +112,9 @@ struct float16
 // Clamp float value
 float Clamp (float value, float min, float max);
 
+// Calculate linear interpolation between two vectors
+float Lerp (float start, float end, float amount);
+
 //----------------------------------------------------------------------------------
 // Module Functions Definition - Vector2 math
 //----------------------------------------------------------------------------------
@@ -146,6 +154,9 @@ Vector2 Vector2Divide (Vector2 v, float div);
 
 // Normalize provided vector
 Vector2 Vector2Normalize (Vector2 v);
+
+// Calculate linear interpolation between two vectors
+Vector2 Vector2Lerp (Vector2 v1, Vector2 v2, float amount);
 
 //----------------------------------------------------------------------------------
 // Module Functions Definition - Vector3 math

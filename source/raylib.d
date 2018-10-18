@@ -74,6 +74,10 @@ pragma(lib, "raylib");
 
 extern (C):
 
+import core.stdc.stdarg;
+
+// Required for: va_list - Only used by TraceLogCallback
+
 // We are building raylib as a Win32 shared library (.dll)
 
 // We are using raylib as a Win32 shared library (.dll) // We are building or using raylib as a static library (or Linux shared library)
@@ -132,14 +136,42 @@ enum KEY_F12 = 301;
 enum KEY_LEFT_SHIFT = 340;
 enum KEY_LEFT_CONTROL = 341;
 enum KEY_LEFT_ALT = 342;
+enum KEY_LEFT_SUPER = 343;
 enum KEY_RIGHT_SHIFT = 344;
 enum KEY_RIGHT_CONTROL = 345;
 enum KEY_RIGHT_ALT = 346;
-enum KEY_GRAVE = 96;
-enum KEY_SLASH = 47;
+enum KEY_RIGHT_SUPER = 347;
+enum KEY_KB_MENU = 348;
+enum KEY_LEFT_BRACKET = 91;
 enum KEY_BACKSLASH = 92;
+enum KEY_RIGHT_BRACKET = 93;
+enum KEY_GRAVE = 96;
+
+// Keyboard Number Pad Keys
+enum KEY_KP_0 = 320;
+enum KEY_KP_1 = 321;
+enum KEY_KP_2 = 322;
+enum KEY_KP_3 = 323;
+enum KEY_KP_4 = 324;
+enum KEY_KP_5 = 325;
+enum KEY_KP_6 = 326;
+enum KEY_KP_7 = 327;
+enum KEY_KP_8 = 328;
+enum KEY_KP_9 = 329;
+enum KEY_KP_DECIMAL = 330;
+enum KEY_KP_DIVIDE = 331;
+enum KEY_KP_MULTIPLY = 332;
+enum KEY_KP_SUBTRACT = 333;
+enum KEY_KP_ADD = 334;
+enum KEY_KP_ENTER = 335;
+enum KEY_KP_EQUAL = 336;
 
 // Keyboard Alpha Numeric Keys
+enum KEY_APOSTROPHE = 39;
+enum KEY_COMMA = 44;
+enum KEY_MINUS = 45;
+enum KEY_PERIOD = 46;
+enum KEY_SLASH = 47;
 enum KEY_ZERO = 48;
 enum KEY_ONE = 49;
 enum KEY_TWO = 50;
@@ -150,6 +182,8 @@ enum KEY_SIX = 54;
 enum KEY_SEVEN = 55;
 enum KEY_EIGHT = 56;
 enum KEY_NINE = 57;
+enum KEY_SEMICOLON = 59;
+enum KEY_EQUAL = 61;
 enum KEY_A = 65;
 enum KEY_B = 66;
 enum KEY_C = 67;
@@ -277,7 +311,10 @@ enum GAMEPAD_XBOX_AXIS_RT = 5; // [-1..1] (pressure-level)
 // NOTE: MSC C++ compiler does not support compound literals (C99 feature)
 // Plain structures in C++ (without constructors) can be initialized from { } initializers.
 
-alias CLITERAL = Color;
+enum CLITERAL = Color;
+
+// Some Basic Colors
+// NOTE: Custom raylib color palette for amazing visuals on WHITE background // Light Gray // Gray // Dark Gray // Yellow // Gold // Orange // Pink // Red // Maroon // Green // Lime // Dark Green // Sky Blue // Blue // Dark Blue // Purple // Violet // Dark Purple // Beige // Brown // Dark Brown // White // Black // Blank (Transparent) // Magenta // My own White (raylib logo)
 
 // Some Basic Colors
 // NOTE: Custom raylib color palette for amazing visuals on WHITE background
@@ -341,6 +378,7 @@ struct Vector4
     float w;
 }
 
+// Quaternion type, same as Vector4
 alias Quaternion = Vector4;
 
 // Matrix type (OpenGL style 4x4 - right handed, column major)
@@ -404,12 +442,28 @@ struct Texture2D
     int format; // Data format (PixelFormat type)
 }
 
+// Texture type, same as Texture2D
+alias Texture = Texture2D;
+
 // RenderTexture2D type, for texture rendering
 struct RenderTexture2D
 {
     uint id; // OpenGL Framebuffer Object (FBO) id
     Texture2D texture; // Color buffer attachment texture
     Texture2D depth; // Depth buffer attachment texture
+}
+
+// RenderTexture type, same as RenderTexture2D
+alias RenderTexture = RenderTexture2D;
+
+struct NPatchInfo
+{
+    Rectangle sourceRec; // Region in the texture
+    int left; // left border offset
+    int top; // top border offset
+    int right; // right border offset
+    int bottom; // bottom border offset
+    int type; // layout of the n-patch: 3x3, 1x3 or 3x1
 }
 
 // Font character info
@@ -432,7 +486,7 @@ struct Font
     CharInfo* chars; // Characters info data
 }
 
-alias SpriteFont = Font; // SpriteFont type fallback, defaults to Font
+enum SpriteFont = Font; // SpriteFont type fallback, defaults to Font
 
 // Camera type, defines a camera position/orientation in 3d space
 struct Camera3D
@@ -444,7 +498,7 @@ struct Camera3D
     int type; // Camera type, defines projection type: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
 }
 
-alias Camera = Camera3D; // Camera type fallback, defaults to Camera3D
+enum Camera = Camera3D; // Camera type fallback, defaults to Camera3D
 
 // Camera2D type, defines a 2d camera
 struct Camera2D
@@ -469,6 +523,7 @@ struct Mesh
     int vertexCount; // Number of vertices stored in arrays
     int triangleCount; // Number of triangles stored (indexed or not)
 
+    // Default vertex data
     float* vertices; // Vertex position (XYZ - 3 components per vertex) (shader-location = 0)
     float* texcoords; // Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)
     float* texcoords2; // Vertex second texture coordinates (useful for lightmaps) (shader-location = 5)
@@ -477,8 +532,15 @@ struct Mesh
     ubyte* colors; // Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)
     ushort* indices; // Vertex indices (in case vertex data comes indexed)
 
+    // Animation vertex data
+    float* baseVertices; // Vertex base position (required to apply bones transformations)
+    float* baseNormals; // Vertex base normals (required to apply bones transformations)
+    float* weightBias; // Vertex weight bias
+    int* weightId; // Vertex weight id
+
+    // OpenGL identifiers
     uint vaoId; // OpenGL Vertex Array Object id
-    uint[7] vboId; // OpenGL Vertex Buffer Objects id (7 types of vertex data)
+    uint[7] vboId; // OpenGL Vertex Buffer Objects id (default vertex data)
 }
 
 // Shader type (generic)
@@ -749,6 +811,17 @@ enum VrDeviceType
     HMD_SONY_PSVR = 5
 }
 
+// Type of n-patch
+enum NPatchType
+{
+    NPT_9PATCH = 0, // 3x3
+    NPT_3PATCH_VERTICAL = 1, // 1x3
+    NPT_3PATCH_HORIZONTAL = 2 // 3x1
+}
+
+// Callbacks to be implemented by users
+alias TraceLogCallback = void function (int msgType, const(char)* text, va_list args);
+
 // Prevents name mangling of functions
 
 //------------------------------------------------------------------------------------
@@ -799,7 +872,7 @@ Ray GetMouseRay (Vector2 mousePosition, Camera3D camera); // Returns a ray trace
 Vector2 GetWorldToScreen (Vector3 position, Camera3D camera); // Returns the screen space position for a 3d world space position
 Matrix GetCameraMatrix (Camera3D camera); // Returns camera transform matrix (view matrix)
 
-// Timming-related functions
+// timing-related functions
 void SetTargetFPS (int fps); // Set target FPS (maximum)
 int GetFPS (); // Returns current FPS
 float GetFrameTime (); // Returns time in seconds for last frame drawn
@@ -816,6 +889,7 @@ Color Fade (Color color, float alpha); // Color fade-in or fade-out, alpha goes 
 void ShowLogo (); // Activate raylib logo at startup (can be done with flags)
 void SetConfigFlags (ubyte flags); // Setup window configuration flags (view FLAGS)
 void SetTraceLog (ubyte types); // Enable trace log message types (bit flags based)
+void SetTraceLogCallback (TraceLogCallback callback); // Set a trace log callback to enable custom logging bypassing raylib's one
 void TraceLog (int logType, const(char)* text, ...); // Show trace log messages (LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_DEBUG)
 void TakeScreenshot (const(char)* fileName); // Takes a screenshot of current screen (saved a .png)
 int GetRandomValue (int min, int max); // Returns a random value between min and max (both included)
@@ -1013,6 +1087,7 @@ void DrawTextureV (Texture2D texture, Vector2 position, Color tint); // Draw a T
 void DrawTextureEx (Texture2D texture, Vector2 position, float rotation, float scale, Color tint); // Draw a Texture2D with extended parameters
 void DrawTextureRec (Texture2D texture, Rectangle sourceRec, Vector2 position, Color tint); // Draw a part of a texture defined by a rectangle
 void DrawTexturePro (Texture2D texture, Rectangle sourceRec, Rectangle destRec, Vector2 origin, float rotation, Color tint); // Draw a part of a texture defined by a rectangle with 'pro' parameters
+void DrawTextureNPatch (Texture2D texture, NPatchInfo nPatchInfo, Rectangle destRec, Vector2 origin, float rotation, Color tint); // Draws a texture (or part of it) that stretches or shrinks nicely.
 
 //------------------------------------------------------------------------------------
 // Font Loading and Text Drawing Functions (Module: text)
@@ -1036,7 +1111,7 @@ int MeasureText (const(char)* text, int fontSize); // Measure string width for d
 Vector2 MeasureTextEx (Font font, const(char)* text, float fontSize, float spacing); // Measure string size for Font
 const(char)* FormatText (const(char)* text, ...); // Formatting of text with variables to 'embed'
 const(char)* SubText (const(char)* text, int position, int length); // Get a piece of a text string
-int GetGlyphIndex (Font font, int character); // Get index position for a unicode character on sprite font
+int GetGlyphIndex (Font font, int character); // Get index position for a unicode character on font
 
 //------------------------------------------------------------------------------------
 // Basic 3d Shapes Drawing Functions (Module: models)

@@ -105,11 +105,13 @@ module raygui;
 
 import raylib;
 
-extern (C): // Functions just visible to module including this file
+extern (C):
 
-// Functions visible from other files (no name mangling of functions in C++)
+// #define RAYGUI_STATIC
 
-// Functions visible from other files
+// Functions just visible to module including this file
+
+// Functions visible from other files (no name mangling of functions in C++) // Functions visible from other files
 
 // Required for: atoi()
 
@@ -371,8 +373,9 @@ bool GuiMessageBox (Rectangle bounds, const(char)* windowTitle, const(char)* mes
 
 // Save style file (.rgs), text or binary
 // Load style file (.rgs), text or binary
-// Load style from an image style file
 // Load style from a color palette array (14 values required)
+// Load style from an image palette file (64x16)
+
 // Updates full style properties set with generic values
 
 // RAYGUI_H
@@ -759,9 +762,9 @@ bool GuiMessageBox (Rectangle bounds, const(char)* windowTitle, const(char)* mes
 
 // -- GuiTexture()
 
-// -- GuiLoadStyleImage()
-// -- GuiLoadStyleImage()
-// -- GuiLoadStyleImage()
+// -- GuiLoadStylePaletteImage()
+// -- GuiLoadStylePaletteImage()
+// -- GuiLoadStylePaletteImage()
 
 // RAYGUI_STANDALONE
 
@@ -785,6 +788,8 @@ bool GuiMessageBox (Rectangle bounds, const(char)* windowTitle, const(char)* mes
 // Get one style property value
 
 // Window Box control
+
+//int textHeight = style[DEFAULT_TEXT_SIZE];
 
 // Update control
 //--------------------------------------------------------------------
@@ -1118,6 +1123,7 @@ bool GuiMessageBox (Rectangle bounds, const(char)* windowTitle, const(char)* mes
 // Update control
 //--------------------------------------------------------------------
 
+//Vector2 mousePoint = GetMousePosition();
 //if (CheckCollisionPointRec(mousePoint, bounds)) state = FOCUSED;      // State not required on ProgressBar
 
 //--------------------------------------------------------------------
@@ -1137,6 +1143,7 @@ bool GuiMessageBox (Rectangle bounds, const(char)* windowTitle, const(char)* mes
 // Update control
 //--------------------------------------------------------------------
 
+//Vector2 mousePoint = GetMousePosition();
 //if (CheckCollisionPointRec(mousePoint, bounds)) state = FOCUSED;      // State not required on ProgressBar
 
 //--------------------------------------------------------------------
@@ -1291,26 +1298,9 @@ else if (IsKeyDown(KEY_DOWN))
 //      float GuiColorBarHue(Rectangle bounds, float value)
 // NOTE: bounds define GuiColorPanel() size
 
-//color.a = (unsigned char)(GuiColorBarAlpha(boundsAlpha, (float)color.a/255.0f)*255.0f);
+//Rectangle boundsAlpha = { bounds.x, bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], bounds.width, style[COLORPICKER_BARS_THICK] };
 
-/*
-// Draw control: color select panel
-//--------------------------------------------------------------------
-if (state != DISABLED)
-{
-    for (int i = 0; i < 2; i++) DrawRectangle(bounds.x + style[COLORPICKER_BARS_PADDING]*(i%((int)bounds.width/(style[COLORPICKER_BARS_THICK]/2))) + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], bounds.width/(bounds.width/(style[COLORPICKER_BARS_THICK]/2)), style[COLORPICKER_BARS_THICK]/2, (i%2) ? Fade(Fade(GRAY, 0.4f), guiAlpha) : Fade(Fade(RAYWHITE, 0.4f), guiAlpha));
-    for (int i = 0; i < 2; i++) DrawRectangle(bounds.x + style[COLORPICKER_BARS_PADDING]*(i%((int)bounds.width/(style[COLORPICKER_BARS_THICK]/2))) + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + style[COLORPICKER_BARS_PADDING] + bounds.height + style[COLORPICKER_BARS_PADDING], bounds.width/(bounds.width/(style[COLORPICKER_BARS_THICK]/2)), style[COLORPICKER_BARS_THICK]/2, (i%2) ? Fade(Fade(RAYWHITE, 0.4f), guiAlpha) : Fade(Fade(GRAY, 0.4f), guiAlpha));
-    DrawRectangle(bounds.x + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], style[COLORPICKER_BARS_THICK], style[COLORPICKER_BARS_THICK], Fade(color, guiAlpha));
-    DrawRectangleLines(bounds.x + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], style[COLORPICKER_BARS_THICK], style[COLORPICKER_BARS_THICK], Fade(GetColor(style[COLORPICKER_BORDER_COLOR_NORMAL]), guiAlpha));
-}
-else
-{
-    //DrawRectangleGradientEx((Rectangle){ bounds.x + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], style[COLORPICKER_BARS_THICK], style[COLORPICKER_BARS_THICK] }, WHITE, GRAY, BLACK, GRAY);
-    DrawRectangle(bounds.x + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], style[COLORPICKER_BARS_THICK], style[COLORPICKER_BARS_THICK], Fade(GetColor(style[COLORPICKER_BASE_COLOR_DISABLED]), guiAlpha));
-    DrawRectangleLines(bounds.x + bounds.width + style[COLORPICKER_BARS_PADDING], bounds.y + bounds.height + style[COLORPICKER_BARS_PADDING], style[COLORPICKER_BARS_THICK], style[COLORPICKER_BARS_THICK], Fade(GetColor(style[COLORPICKER_BORDER_COLOR_DISABLED]), guiAlpha));
-}
-//--------------------------------------------------------------------
-*/
+//color.a = (unsigned char)(GuiColorBarAlpha(boundsAlpha, (float)color.a/255.0f)*255.0f);
 
 // Message Box control
 
@@ -1357,15 +1347,15 @@ else
 
 // Update style property
 
-// Load GUI style from an image style file
-
-// NOTE: Image data only defines color properties
+// Load style from a color palette array (14 values required)
 
 // Load generic style color palette
 
 // Update full style with generic values
 
-// Load style from a color palette array (14 values required)
+// Load GUI style from an image style file
+
+// NOTE: Image data only defines color properties
 
 // Load generic style color palette
 
