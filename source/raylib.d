@@ -376,7 +376,7 @@ struct Color
     ubyte r;
     ubyte g;
     ubyte b;
-    ubyte a;
+    ubyte a = 255;
 }
 
 // Rectangle type
