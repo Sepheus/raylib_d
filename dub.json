@@ -1,15 +1,26 @@
 {
-	"name": "raylib_d",
 	"authors": [
-		"0xFireball"
+		"0xFireball",
+		"Sepheus"
 	],
-	"description": "D bindings for Raylib",
+	"configurations": [
+		{
+			"name": "library",
+			"targetType": "library"
+		}
+	],
 	"copyright": "Copyright (c) 2013-2016 Ramon Santamaria (@raysan5), Nihal Talur (@0xFireball)",
-	"license": "MIT",
+	"description": "D bindings for Raylib",
+	"importPaths": [
+		"source"
+	],
 	"libs": [
 		"raylib"
 	],
-	"importPaths": [
-		"source"
-	]
+	"license": "MIT",
+	"name": "raylib_d",
+	"sourcePaths": [
+		"source/"
+	],
+	"version": "2.0.7"
 }

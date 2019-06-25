@@ -3,4 +3,4 @@
 
 raylib bindings for dlang
 
-supports raylib 2.0
+supports raylib 2.5
