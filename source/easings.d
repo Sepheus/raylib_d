@@ -80,14 +80,13 @@
 **********************************************************************************************/
 
 module easings;
-
 import raylib;
 
-extern (C):
+extern (C): // NOTE: By default, compile functions as static inline
 
-// #define EASINGS_STATIC_INLINE     // NOTE: By default, compile functions as static inline
+// Required for: sinf(), cosf(), sqrt(), pow()
 
-// Required for: sin(), cos(), sqrt(), pow()
+enum PI = 3.14159265358979323846f; //Required as PI is not always defined in math.h
 
 // Prevents name mangling of functions
 

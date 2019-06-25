@@ -40,7 +40,6 @@
 **********************************************************************************************/
 
 module raymath;
-
 import raylib;
 
 extern (C):
@@ -49,8 +48,6 @@ extern (C):
 //#define RAYMATH_HEADER_ONLY     // NOTE: To compile functions as static inline, uncomment this line
 
 // Required for structs: Vector3, Matrix
-
-// Functions visible from other files (no name mangling of functions in C++) // Functions visible from other files
 
 // We are building raylib as a Win32 shared library (.dll).
 
@@ -146,11 +143,17 @@ float Vector2Angle (Vector2 v1, Vector2 v2);
 // Scale vector (multiply by value)
 Vector2 Vector2Scale (Vector2 v, float scale);
 
+// Multiply vector by vector
+Vector2 Vector2MultiplyV (Vector2 v1, Vector2 v2);
+
 // Negate vector
 Vector2 Vector2Negate (Vector2 v);
 
 // Divide vector by a float value
 Vector2 Vector2Divide (Vector2 v, float div);
+
+// Divide vector by vector
+Vector2 Vector2DivideV (Vector2 v1, Vector2 v2);
 
 // Normalize provided vector
 Vector2 Vector2Normalize (Vector2 v);
@@ -171,7 +174,7 @@ Vector3 Vector3One ();
 // Add two vectors
 Vector3 Vector3Add (Vector3 v1, Vector3 v2);
 
-// Substract two vectors
+// Subtract two vectors
 Vector3 Vector3Subtract (Vector3 v1, Vector3 v2);
 
 // Multiply vector by scalar
@@ -200,6 +203,12 @@ Vector3 Vector3Scale (Vector3 v, float scale);
 
 // Negate provided vector (invert direction)
 Vector3 Vector3Negate (Vector3 v);
+
+// Divide vector by a float value
+Vector3 Vector3Divide (Vector3 v, float div);
+
+// Divide vector by vector
+Vector3 Vector3DivideV (Vector3 v1, Vector3 v2);
 
 // Normalize provided vector
 Vector3 Vector3Normalize (Vector3 v);
@@ -271,8 +280,8 @@ Matrix MatrixIdentity ();
 // Add two matrices
 Matrix MatrixAdd (Matrix left, Matrix right);
 
-// Substract two matrices (left - right)
-Matrix MatrixSubstract (Matrix left, Matrix right);
+// Subtract two matrices (left - right)
+Matrix MatrixSubtract (Matrix left, Matrix right);
 
 // Returns translation matrix
 Matrix MatrixTranslate (float x, float y, float z);

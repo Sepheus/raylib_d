@@ -16,13 +16,13 @@
 *       functions must be redefined to manage inputs accordingly.
 *
 *   CONTRIBUTORS:
-*       Marc Palau:         Initial implementation (2014)
 *       Ramon Santamaria:   Supervision, review, update and maintenance
+*       Marc Palau:         Initial implementation (2014)
 *
 *
 *   LICENSE: zlib/libpng
 *
-*   Copyright (c) 2015-2017 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2015-2019 Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -40,11 +40,8 @@
 *     3. This notice may not be removed or altered from any source distribution.
 *
 **********************************************************************************************/
-
 module camera;
-
 import raylib;
-
 extern (C):
 
 //----------------------------------------------------------------------------------
@@ -57,13 +54,23 @@ extern (C):
 // NOTE: Below types are required for CAMERA_STANDALONE usage
 //----------------------------------------------------------------------------------
 
-// Camera modes
-
 // Vector2 type
 
 // Vector3 type
 
 // Camera type, defines a camera position/orientation in 3d space
+
+// Camera position
+// Camera target it looks-at
+// Camera up vector (rotation over its axis)
+// Camera field-of-view apperture in Y (degrees) in perspective, used as near plane width in orthographic
+// Camera type, defines projection type: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
+
+// Camera type fallback, defaults to Camera3D
+
+// Camera system modes
+
+// Camera projection modes
 
 // Prevents name mangling of functions
 
@@ -93,7 +100,7 @@ extern (C):
 *
 ************************************************************************************/
 
-// Required for: sqrt(), sin(), cos()
+// Required for: sqrt(), sinf(), cosf()
 
 //----------------------------------------------------------------------------------
 // Defines and Macros
@@ -121,8 +128,8 @@ extern (C):
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-// TODO: Remove! Compute it in UpdateCamera()
-// TODO: Remove! Compute it in UpdateCamera()
+// Camera angle in plane XZ
+// Camera distance from position to target 
 // Default player eyes position from ground (in meters) 
 
 // raylib: MOUSE_MIDDLE_BUTTON
@@ -145,9 +152,6 @@ extern (C):
 //----------------------------------------------------------------------------------
 
 // Select camera mode (multiple camera modes available)
-
-// TODO: cameraTargetDistance and cameraAngle should be 
-// calculated using camera parameters on UpdateCamera()
 
 // Camera angle calculation
 // Camera angle in plane XZ (0 aligned with Z, move positive CCW)
@@ -202,24 +206,18 @@ extern (C):
 
 // Camera panning
 
+// Update camera position with changes
+
 // Camera orbit angle
 // Camera zoom
 
 // Camera distance clamp
 
+// Update camera position with changes
+
 // Required for swinging
 
 // Camera orientation calculation
-
-// Angle clamp
-
-// Camera zoom
-
-// Camera distance clamp
-
-// Camera is always looking at player
-
-// CAMERA_FIRST_PERSON
 
 // Angle clamp
 
@@ -228,9 +226,7 @@ extern (C):
 // Camera position update
 // NOTE: On CAMERA_FIRST_PERSON player Y-movement is limited to player 'eyes position'
 
-// Update camera position with changes
-
-// TODO: It seems camera->position is not correctly updated or some rounding issue makes the camera move straight to camera->target...
+// Camera zoom
 
 // Set camera pan key to combine with mouse movement (free camera)
 

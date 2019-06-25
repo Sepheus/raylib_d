@@ -43,7 +43,7 @@
 *   NOTE 2: Physac requires static C library linkage to avoid dependency on MinGW DLL (-static -lpthread)
 *
 *   Use the following code to compile:
-*   gcc -o $(NAME_PART).exe $(FILE_NAME) -s -static -lraylib -lpthread -lopengl32 -lgdi32 -std=c99
+*   gcc -o $(NAME_PART).exe $(FILE_NAME) -s -static -lraylib -lpthread -lopengl32 -lgdi32 -lwinmm -std=c99
 *
 *   VERY THANKS TO:
 *       Ramon Santamaria (github: @raysan5)
@@ -73,7 +73,7 @@
 module physac;
 
 import raylib;
-import core.stdc.stdlib; // for malloc() and free()
+import core.stdc.stdlib : malloc, free; // for malloc() and free()
 
 extern (C):
 
@@ -94,8 +94,6 @@ enum PHYSAC_MAX_MANIFOLDS = 4096;
 enum PHYSAC_MAX_VERTICES = 24;
 enum PHYSAC_CIRCLE_VERTICES = 24;
 
-enum PHYSAC_DESIRED_DELTATIME = 1.0 / 60.0;
-enum PHYSAC_MAX_TIMESTEP = 0.02;
 enum PHYSAC_COLLISION_ITERATIONS = 100;
 enum PHYSAC_PENETRATION_ALLOWANCE = 0.05f;
 enum PHYSAC_PENETRATION_CORRECTION = 0.4f;
@@ -194,6 +192,8 @@ alias PhysicsManifold = PhysicsManifoldData*;
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
 void InitPhysics (); // Initializes physics values, pointers and creates physics loop thread
+void RunPhysicsStep (); // Run physics step, to be used if PHYSICS_NO_THREADS is set in your main loop
+void SetPhysicsTimeStep (double delta); // Sets physics fixed time step in milliseconds. 1.666666 by default
 bool IsPhysicsEnabled (); // Returns true if physics thread is currently enabled
 void SetPhysicsGravity (float x, float y); // Sets physics global gravity force
 PhysicsBody CreatePhysicsBodyCircle (Vector2 pos, float radius, float density); // Creates a new circle physics body with generic parameters
@@ -231,13 +231,13 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 // Required for: Vector2Add(), Vector2Subtract()
 
 // Time management functionality
+// Required for: time(), clock_gettime()
 
 // Functions required to query time on Windows
 
 // Required for CLOCK_MONOTONIC if compiled with c99 without gnu ext.
 
 // Required for: timespec
-// Required for: clock_gettime()
 // macOS also defines __MACH__
 // Required for: mach_absolute_time()
 
@@ -253,10 +253,9 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 
 // Total allocated dynamic memory
 // Physics thread enabled state
-
 // Offset time for MONOTONIC clock
 // Start time in milliseconds
-// Delta time used for physics steps
+// Delta time used for physics steps, in milliseconds
 // Current time in milliseconds
 // Hi-res clock frequency
 
@@ -296,13 +295,10 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 // Returns the barycenter of a triangle given by 3 points
 
 // Initializes hi-resolution MONOTONIC timer
-// Get hi-res MONOTONIC time measure in seconds
-// // Get hi-res MONOTONIC time measure in seconds
-
-// Returns a random number between min and max (both included)
+// Get hi-res MONOTONIC time measure in mseconds
+// Get current time measure in milliseconds
 
 // Math functions
-// Clamp a value in a range
 // Returns the cross product of a vector and a value
 // Returns the cross product of two vectors
 // Returns the len square root of a vector
@@ -325,6 +321,8 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 
 // NOTE: if defined, user will need to create a thread for PhysicsThread function manually
 // Create physics thread using POSIXS thread libraries
+
+// Initialize high resolution timer
 
 // Returns true if physics thread is currently enabled
 
@@ -420,6 +418,10 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 
 // Exit physics loop thread
 
+// Unitialize physics manifolds dynamic memory allocations
+
+// Unitialize physics bodies dynamic memory allocations
+
 //----------------------------------------------------------------------------------
 // Module Internal Functions Definition
 //----------------------------------------------------------------------------------
@@ -445,25 +447,7 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 
 // Initialize physics loop thread values
 
-// Initialize high resolution timer
-
 // Physics update loop
-
-// Calculate current time
-
-// Calculate current delta time
-
-// Store the time elapsed since the last frame began
-
-// Clamp accumulator to max time step to avoid bad performance
-
-// Fixed time stepping loop
-
-// Record the starting of this frame
-
-// Unitialize physics manifolds dynamic memory allocations
-
-// Unitialize physics bodies dynamic memory allocations
 
 // Physics steps calculations (dynamics, collisions and position corrections)
 
@@ -488,6 +472,21 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 // Correct physics bodies positions based on manifolds collision information
 
 // Clear physics bodies forces
+
+// Wrapper to ensure PhysicsStep is run with at a fixed time step
+
+// Calculate current time
+
+// Calculate current delta time
+
+// Store the time elapsed since the last frame began
+
+// Fixed time stepping loop
+
+//printf("currentTime %f, startTime %f, accumulator-pre %f, accumulator-post %f, delta %f, deltaTime %f\n",
+//       currentTime, startTime, accumulator, accumulator-deltaTime, delta, deltaTime);
+
+// Record the starting of this frame
 
 // Finds a valid index for a new manifold initialization
 
@@ -621,6 +620,8 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 
 // Finds polygon shapes axis least penetration
 
+//PolygonData dataB = shapeB.vertexData;
+
 // Retrieve a face normal from A shape
 
 // Transform face normal into B shape's model space
@@ -669,10 +670,6 @@ void ClosePhysics (); // Unitializes physics pointers and closes physics loop th
 // Get hi-res MONOTONIC time measure in seconds
 
 // Get current time in milliseconds
-
-// Returns a random number between min and max (both included)
-
-// Clamp a value in a range
 
 // Returns the cross product of a vector and a value
 
